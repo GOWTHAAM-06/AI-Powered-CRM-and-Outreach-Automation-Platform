@@ -3,13 +3,22 @@ Leads and Opportunities Endpoints.
 Supports listing with filters, pagination, lead detail drawer view, and atomic claiming.
 """
 
-from typing import Optional, List
+import json
+from typing import Optional, List, Literal
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from pydantic import BaseModel
-
+from backend.app.core.db import transaction
 from backend.app.core.security import get_current_user
+from backend.app.repositories import leads_repo
+from backend.app.core.errors import ResourceNotFoundError
 
 router = APIRouter(prefix="/leads", tags=["Leads & Pipeline"])
+
+ADMIN_ASSIGN_ROLES = ["admin", "campaign_manager"]
+
+
+class ClaimLeadRequest(BaseModel):
+    user_id: Optional[str] = None
 
 
 class LeadSummaryDTO(BaseModel):
@@ -94,87 +103,154 @@ SAMPLE_LEADS = [
 ]
 
 
+
 @router.get("", response_model=PaginatedLeadsResponse)
 def list_leads(
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=25, ge=1, le=100),
     source: Optional[str] = None,
-    score_band: Optional[str] = None,
-    status: Optional[str] = None,
+    experience_min: Optional[int] = Query(default=None, ge=0),
+    experience_max: Optional[int] = Query(default=None, ge=0),
+    score_band: Optional[Literal["high", "medium", "low", "suppressed"]] = None,
+    status: Optional[Literal[
+        "new", "needs_enrichment", "verified", "draft_ready",
+        "approved", "sent", "closed"
+    ]] = None,
+    assigned_to: Optional[str] = None,
     search: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    sort_by: Literal[
+    "discovered_at",
+    "score",
+    "experience_min",
+    "experience_max",
+    "organization_name",
+    "title",
+] = "discovered_at",
+    sort_order: Literal["asc", "desc"] = "desc",
+    current_user: dict = Depends(get_current_user),
 ):
-    """Lists leads with filtering, score bands, and server-side pagination."""
-    items = SAMPLE_LEADS.copy()
+    """List leads with filters, sorting, and pagination."""
 
-    if source:
-        items = [i for i in items if source.lower() in i["source_name"].lower()]
-    if score_band:
-        items = [i for i in items if i["score_band"] == score_band.lower()]
-    if status:
-        items = [i for i in items if i["status"] == status.lower()]
-    if search:
-        s = search.lower()
-        items = [i for i in items if s in i["title"].lower() or s in i["organization_name"].lower()]
+    if (
+        experience_min is not None
+        and experience_max is not None
+        and experience_min > experience_max
+    ):
+        raise HTTPException(
+            status_code=422,
+            detail="experience_min cannot be greater than experience_max",
+        )
 
-    total = len(items)
-    start = (page - 1) * page_size
-    paged_items = items[start:start + page_size]
-    total_pages = max(1, (total + page_size - 1) // page_size)
+    filters = {
+        "source": source,
+        "experience_min": experience_min,
+        "experience_max": experience_max,
+        "score_band": score_band,
+        "status": status,
+        "assigned_to": assigned_to,
+        "search": search,
+        "sort_by": sort_by,
+        "sort_order": sort_order,
+    }
+
+    items, total = leads_repo.list_leads(
+        filters=filters,
+        page=page,
+        page_size=page_size,
+    )
 
     return PaginatedLeadsResponse(
-        items=paged_items,
+        items=items,
         total=total,
         page=page,
         page_size=page_size,
-        total_pages=total_pages
+        total_pages=(total + page_size - 1) // page_size,
     )
 
 
 @router.get("/{id}")
-def get_lead_by_id(id: str, current_user: dict = Depends(get_current_user)):
-    """Retrieves full lead context, score breakdown, and contact history."""
-    for lead in SAMPLE_LEADS:
-        if lead["id"] == id:
-            detailed = lead.copy()
-            detailed["description"] = "Full job description for this verified opportunity."
-            detailed["contacts"] = [
-                {
-                    "id": "c0000001-0000-0000-0000-000000000001",
-                    "name": "Sarah Jenkins",
-                    "role_title": "Head of Talent Acquisition",
-                    "methods": [
-                        {
-                            "id": "m0000001-0000-0000-0000-000000000001",
-                            "kind": "email",
-                            "value": "sjenkins@example.com",
-                            "verified_status": "deliverable",
-                            "verified_at": "2026-10-16T10:00:00Z"
-                        }
-                    ]
-                }
-            ]
-            detailed["score_reasons"] = [
-                {"code": "OFFICIAL_COMPANY_SOURCE", "description": "Verified official employer source", "points": 25},
-                {"code": "CONTACT_ROLE_CONFIRMED", "description": "Recruiter role identified", "points": 25},
-                {"code": "EMAIL_VERIFIED_DELIVERABLE", "description": "Deliverable email verified", "points": 20}
-            ]
-            return detailed
+def get_lead_by_id(
+    id: str,
+    current_user: dict = Depends(get_current_user),
+):
+    """Retrieve complete details for a specific lead."""
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Lead with id '{id}' not found")
+    lead = leads_repo.get_lead_by_id(lead_id=id)
 
+    if lead is None:
+        raise ResourceNotFoundError(
+            resource="Lead",
+            identifier=id,
+        )
+
+    return lead
 
 @router.post("/{id}/claim")
-def claim_lead(id: str, current_user: dict = Depends(get_current_user)):
-    """Atomically claims a lead for the authenticated user."""
-    for lead in SAMPLE_LEADS:
-        if lead["id"] == id:
-            if lead["assigned_to"] and lead["assigned_to"] != current_user["id"]:
+def claim_lead(
+    id: str,
+    payload: ClaimLeadRequest = ClaimLeadRequest(),
+    current_user: dict = Depends(get_current_user)
+):
+    
+    target_user_id = payload.user_id or current_user["id"]
+
+    if payload.user_id and payload.user_id != current_user["id"]:
+        if current_user.get("role") not in ADMIN_ASSIGN_ROLES:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Only admins and campaign managers may assign leads to another user"
+            )
+
+    with transaction() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                UPDATE opportunities
+                SET assigned_to = %s, claimed_at = NOW()
+                WHERE id = %s AND assigned_to IS NULL
+                RETURNING id, assigned_to, claimed_at, status;
+                """,
+                (target_user_id, id)
+            )
+            updated = cur.fetchone()
+
+            if updated is None:
+                cur.execute("SELECT assigned_to FROM opportunities WHERE id = %s;", (id,))
+                existing = cur.fetchone()
+                if existing is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Lead with id '{id}' not found"
+                    )
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail="Lead is already claimed by another team member"
+                    detail="Lead has already been claimed by another team member"
                 )
-            lead["assigned_to"] = current_user["id"]
-            return lead
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Lead not found")
+            columns = [desc[0] for desc in cur.description]
+            lead_row = dict(zip(columns, updated))
+
+            cur.execute(
+                """
+                INSERT INTO audit_logs (actor, action, entity_type, entity_id, details)
+                VALUES (%s, %s, %s, %s, %s);
+                """,
+                (
+                    current_user["id"],
+                    "lead_claimed",
+                    "opportunity",
+                    id,
+                    json.dumps({
+                        "claimed_by": target_user_id,
+                        "assigned_by": current_user["id"],
+                        "assigned_by_role": current_user.get("role")
+                    })
+                )
+            )
+
+    return {
+        "id": str(lead_row["id"]),
+        "assigned_to": str(lead_row["assigned_to"]),
+        "claimed_at": lead_row["claimed_at"].isoformat(),
+        "status": lead_row["status"]
+    }

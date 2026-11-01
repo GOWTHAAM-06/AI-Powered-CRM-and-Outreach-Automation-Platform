@@ -4,32 +4,32 @@
 # ==============================================================================
 
 # Default fallback for repository leads
-*                                   @Akshay-Sharma777
+*                                   @Akshay-Sharma777 @harshitaraghuwanshi812
 
 # Shared configuration and contracts (LEADS ONLY)
-/package.json                       @Akshay-Sharma777
-/docker-compose.yml                 @Akshay-Sharma777
-/.env.example                       @Akshay-Sharma777
-/.github/                           @Akshay-Sharma777
-/contracts/                         @Akshay-Sharma777
-/backend/requirements.txt           @Akshay-Sharma777
-/backend/Dockerfile                 @Akshay-Sharma777
-/frontend/package.json              @Akshay-Sharma777
+/package.json                       @Akshay-Sharma777 @harshitaraghuwanshi812
+/docker-compose.yml                 @Akshay-Sharma777 @harshitaraghuwanshi812
+/.env.example                       @Akshay-Sharma777 @harshitaraghuwanshi812
+/.github/                           @Akshay-Sharma777 @harshitaraghuwanshi812
+/contracts/                         @Akshay-Sharma777 @harshitaraghuwanshi812
+/backend/requirements.txt           @Akshay-Sharma777 @harshitaraghuwanshi812
+/backend/Dockerfile                 @Akshay-Sharma777 @harshitaraghuwanshi812
+/frontend/package.json              @Akshay-Sharma777 @harshitaraghuwanshi812
 
 # Frontend Team
-/frontend/                          @Akshay-Sharma777
-/docs/frontend-guide.md             @Akshay-Sharma777
+/frontend/                          @Akshay-Sharma777 @harshitaraghuwanshi812
+/docs/frontend-guide.md             @Akshay-Sharma777 @harshitaraghuwanshi812
 
 # Backend Core & Data Team
-/backend/                           @Akshay-Sharma777
-/database/                          @Akshay-Sharma777
-/docs/backend-guide.md              @Akshay-Sharma777
+/backend/                           @Akshay-Sharma777 @harshitaraghuwanshi812
+/database/                          @Akshay-Sharma777 @harshitaraghuwanshi812
+/docs/backend-guide.md              @Akshay-Sharma777 @harshitaraghuwanshi812
 
 # Automation & Scrapers Team
-/automation/                        @Akshay-Sharma777
-/infra/                             @Akshay-Sharma777
-/docs/error-playbook.md             @Akshay-Sharma777
+/automation/                        @Akshay-Sharma777 @harshitaraghuwanshi812
+/infra/                             @Akshay-Sharma777 @harshitaraghuwanshi812
+/docs/error-playbook.md             @Akshay-Sharma777 @harshitaraghuwanshi812
 
 # AI Team
-/ai/                                @Akshay-Sharma777
-/docs/ai-guide.md                   @Akshay-Sharma777
+/ai/                                @Akshay-Sharma777 @harshitaraghuwanshi812
+/docs/ai-guide.md                   @Akshay-Sharma777 @harshitaraghuwanshi812

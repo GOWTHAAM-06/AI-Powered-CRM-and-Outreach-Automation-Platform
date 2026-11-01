@@ -1,0 +1,227 @@
+[
+  {
+    "id": "DQ01",
+    "category": "professional",
+    "subject": "Junior Python Developer Opportunity",
+    "body": "Hello Alex, I noticed your interest in Python development. We have a Junior Python Developer opening involving Python, FastAPI, and Docker. Would you be interested in learning more? Best regards, Recruitment Team",
+    "personalization_summary": "References the developer role and relevant technologies.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer", "skills": "Python, FastAPI, and Docker"},
+    "expected_valid": true
+  },
+  {
+    "id": "DQ02",
+    "category": "missing_subject",
+    "subject": "",
+    "body": "Hello Alex, we have a Junior Python Developer opportunity. Would you be interested in learning more about the role? Best regards, Recruitment Team",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ03",
+    "category": "subject_too_long",
+    "subject": "An Extremely Long Subject Line That Exceeds the Maximum Length Allowed for Outreach Email Subjects",
+    "body": "Hello Alex, we have a Junior Python Developer opportunity. Would you like to learn more? Best regards, Recruitment Team",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ04",
+    "category": "empty_body",
+    "subject": "Developer Opportunity",
+    "body": "",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ05",
+    "category": "body_too_short",
+    "subject": "Developer Opportunity",
+    "body": "Hello Alex.",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ06",
+    "category": "body_too_long",
+    "subject": "Developer Opportunity",
+    "body": "Hello Alex, " ,
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false,
+    "repeat_body": "We would like to share more information about this opportunity and learn about your interests. "
+  },
+  {
+    "id": "DQ07",
+    "category": "unprofessional_tone",
+    "subject": "A Job You Might Like",
+    "body": "Hey Alex, this job is freaking awesome and you would be crazy not to take it. Reply now!",
+    "personalization_summary": "Mentions an opportunity.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ08",
+    "category": "missing_greeting",
+    "subject": "Junior Python Developer Role",
+    "body": "We have a Junior Python Developer opening involving Python and FastAPI. Would you be interested in a conversation? Best regards, Recruitment Team",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ09",
+    "category": "missing_closing",
+    "subject": "Junior Python Developer Role",
+    "body": "Hello Alex, we have a Junior Python Developer opening involving Python and FastAPI. Would you be interested in learning more?",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ10",
+    "category": "missing_personalization",
+    "subject": "Hello",
+    "body": "Hello there, I am contacting you about an opportunity. Let me know if you want to hear more. Best regards, Recruitment Team",
+    "personalization_summary": "",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ11",
+    "category": "unsupported_compensation",
+    "subject": "Developer Opportunity",
+    "body": "Hello Alex, this Junior Python Developer role pays 20 LPA. Would you like to discuss the opportunity? Best regards, Recruitment Team",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ12",
+    "category": "invalid_fact_reference",
+    "subject": "Developer Opportunity",
+    "body": "Hello Alex, we have a Junior Python Developer opening. Would you like to learn more? Best regards, Recruitment Team",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [{"fact_id": "unknown_fact", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ13",
+    "category": "missing_claims",
+    "subject": "Developer Opportunity",
+    "body": "Hello Alex, we have a Junior Python Developer opening. Would you like to learn more? Best regards, Recruitment Team",
+    "personalization_summary": "References the developer role.",
+    "claims_used": [],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ14",
+    "category": "valid_skills_personalization",
+    "subject": "Python and FastAPI Opportunity",
+    "body": "Hello Priya, our opening focuses on Python and FastAPI, which may align with your interests. Would you like to receive the role details? Kind regards, Recruitment Team",
+    "personalization_summary": "Highlights the technologies required for the role.",
+    "claims_used": [{"fact_id": "skills", "claim": "Python and FastAPI"}],
+    "facts": {"skills": "Python and FastAPI"},
+    "expected_valid": true
+  },
+  {
+    "id": "DQ15",
+"category": "unsupported_company_claim",
+"subject": "Python Developer Opportunity",
+"body": "Hello Alex, your Python development experience looks relevant to this opportunity. Our company is the largest technology employer in India, and we would love to discuss the role with you. Please let me know if you are interested in learning more. Best regards, Hiring Team",
+"personalization_summary": "Personalized using the candidate's Python development experience.",
+"claims_used": [
+{
+"fact_id": "role",
+"claim": "Python Developer Opportunity"
+}
+],
+"facts": {
+"role": "Python Developer",
+"skills": "Python"
+},
+"forbidden_phrases": [
+"largest technology employer in India"
+],
+"expected_valid": false
+  },
+  {
+    "id": "DQ16",
+    "category": "empty_personalization_summary",
+    "subject": "Junior Python Developer Opportunity",
+    "body": "Hello Alex, we have a Junior Python Developer opening. Would you be interested in learning more? Best regards, Recruitment Team",
+    "personalization_summary": "",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": false
+  },
+  {
+    "id": "DQ17",
+    "category": "valid_missing_information_warning",
+    "subject": "Junior Python Developer Role",
+    "body": "Hello Alex, we have a Junior Python Developer opening. Salary details have not been provided, but I can share the available role information. Would you like to learn more? Best regards, Recruitment Team",
+    "personalization_summary": "References the available role information and acknowledges missing salary details.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}],
+    "missing_information_warnings": ["Salary not provided"],
+    "facts": {"role": "Junior Python Developer"},
+    "expected_valid": true
+  },
+  {
+    "id": "DQ18",
+    "category": "valid_concise_draft",
+    "subject": "Python Developer Opening",
+    "body": "Hello Sam, we have a Python Developer opening. Would you like to learn more about the role? Best regards, Recruitment Team",
+    "personalization_summary": "Names the relevant developer role.",
+    "claims_used": [{"fact_id": "role", "claim": "Python Developer"}],
+    "facts": {"role": "Python Developer"},
+    "expected_valid": true
+  },
+  {
+  "id": "DQ19",
+  "category": "unsupported_skill_claim",
+  "subject": "Python Developer Opportunity",
+  "body": "Hello Alex, your Python development experience looks relevant to this opportunity. We also noticed your Kubernetes and Rust expertise and would love to discuss how these skills fit the role. Please let me know if you are interested in learning more. Best regards, Hiring Team",
+  "personalization_summary": "Personalized using the candidate's Python development experience.",
+  "claims_used": [
+    {
+      "fact_id": "role",
+      "claim": "Python Developer Opportunity"
+    }
+  ],
+  "facts": {
+    "role": "Python Developer",
+    "skills": "Python"
+  },
+  "forbidden_phrases": [
+    "Kubernetes",
+    "Rust"
+  ],
+  "expected_valid": false
+},
+  {
+    "id": "DQ20",
+    "category": "valid_professional_draft",
+    "subject": "Explore a Junior Python Developer Role",
+    "body": "Hello Jordan, I would like to share a Junior Python Developer opportunity. The role information lists Python, FastAPI, and Docker. If this aligns with your interests, I would be happy to provide further details. Kind regards, Recruitment Team",
+    "personalization_summary": "Uses the supplied job title and listed skills to make the message relevant.",
+    "claims_used": [{"fact_id": "role", "claim": "Junior Python Developer"}, {"fact_id": "skills", "claim": "Python, FastAPI, and Docker"}],
+    "facts": {"role": "Junior Python Developer", "skills": "Python, FastAPI, and Docker"},
+    "expected_valid": true
+  }
+]

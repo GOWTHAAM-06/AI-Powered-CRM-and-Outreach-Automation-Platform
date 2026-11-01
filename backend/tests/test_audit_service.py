@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock
 
-from backend.app.services.audit_services import (
+from backend.app.services.audit_service import (
     _redact_sensitive_data,
     log_action,
 )
@@ -73,6 +73,9 @@ def test_redacts_sensitive_values_with_extended_field_names():
         "user_email": "alisha@example.com",
         "phoneNumber": "+1 555 123 4567",
         "authorization": "Bearer secret-token",
+        "password": "my-password",
+        "api_key": "my-api-key",
+        "client_secret": "my-client-secret",
     }
 
     result = _redact_sensitive_data(details)
@@ -80,6 +83,9 @@ def test_redacts_sensitive_values_with_extended_field_names():
     assert result["user_email"] == "[REDACTED]"
     assert result["phoneNumber"] == "[REDACTED]"
     assert result["authorization"] == "[REDACTED]"
+    assert result["password"] == "[REDACTED]"
+    assert result["api_key"] == "[REDACTED]"
+    assert result["client_secret"] == "[REDACTED]"
 
 
 def test_audit_action_uses_caller_transaction():

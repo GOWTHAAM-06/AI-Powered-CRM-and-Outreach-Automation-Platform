@@ -118,3 +118,12 @@ Visit the interactive OpenAPI docs at `http://localhost:8000/docs`.
 ```bash
 pytest backend/tests
 ```
+
+## Audit Logging Service
+
+- **File:** `backend/app/services/audit_service.py`
+- **Helper:** `log_action(conn, actor, action, entity_type, entity_id, details_dict)`
+- Writes audit events using parameterized SQL and stores details as JSONB.
+- Redacts sensitive information, including email addresses, phone numbers, and authentication tokens, before persistence.
+- Uses the caller's database transaction; the service does not commit or roll back independently.
+- **Tests:** Run `python -m pytest backend/tests -v`.
